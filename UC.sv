@@ -122,21 +122,21 @@ module UC (
                                         end
                                     end
                                     else begin //tipo I(shifts)
-                                         if(Register_Intruction_Instr31_0[14:12]==3'd5 && Register_Intruction_Instr31_0[31:26]==3'd0) begin //srli rd, rs1, shamt
+                                         if(Register_Intruction_Instr31_0[14:12]==3'd5 && Register_Intruction_Instr31_0[31:26]==6'd0) begin //srli rd, rs1, shamt
                                             Seletor_Ula <= 3'd0;        //Operação carregar A
                                             mux_A_seletor <= 3'd1;      //Valor contido em A sai do MUX de cima
                                             Mux_Banco_Reg_Seletor <= 0; //O resultado da operação(ALU_OUT) vai para datain no banco de registradores
                                             bancoRegisters_wr <= 1;     //Permitirá ao banco de registradores escrever o resultado(datain) da operação em rd
                                          end
                                          else begin
-                                            if(Register_Intruction_Instr31_0[14:12]==3'd5 && Register_Intruction_Instr31_0[31:26]==3'd16) begin //srai rd, rs1, shamt
+                                            if(Register_Intruction_Instr31_0[14:12]==3'd5 && Register_Intruction_Instr31_0[31:26]==6'd16) begin //srai rd, rs1, shamt
                                                 Seletor_Ula <= 3'd0;        //Operação carregar A
                                                 mux_A_seletor <= 3'd1;      //Valor contido em A sai do MUX de cima
                                                 Mux_Banco_Reg_Seletor <= 0; //O resultado da operação(ALU_OUT) vai para datain no banco de registradores
                                                 bancoRegisters_wr <= 1;     //Permitirá ao banco de registradores escrever o resultado(datain) da operação em rd
                                             end
                                             else begin
-                                                if(Register_Intruction_Instr31_0[14:12]==3'd1 && Register_Intruction_Instr31_0[31:26]==3'd0) begin //slli rd, rs1, shamt
+                                                if(Register_Intruction_Instr31_0[14:12]==3'd1 && Register_Intruction_Instr31_0[31:26]==6'd0) begin //slli rd, rs1, shamt
                                                     Seletor_Ula <= 3'd0;        //Operação carregar A
                                                     mux_A_seletor <= 3'd1;      //Valor contido em A sai do MUX de cima
                                                     Mux_Banco_Reg_Seletor <= 0; //O resultado da operação(ALU_OUT) vai para datain no banco de registradores
