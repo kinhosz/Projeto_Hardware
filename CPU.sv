@@ -50,6 +50,7 @@ wire [63:0] bancoRegisters_DataOut_2;
 
 // saidas e controle registrador A
 wire [63:0] Reg_A_Out;
+wire reset_A;
 
 // saidas e controle registrador B
 wire [63:0] Reg_B_Out;
@@ -97,6 +98,7 @@ reg [63:0] Saida_da_Ula;
 //					Data_Memory_write					: leitura ou Escrita na Memoria
 //					bancoRegisters_write				: escrita em regwriteaddress
 //					Mux64_Banco_Reg_Seletor				: 3 Bits
+//					reset_A								: zera registrador A
 //_____________________________________________________________________________________________________
 
 
@@ -105,20 +107,25 @@ reg [63:0] Saida_da_Ula;
 										.Op(						Register_Intruction_Instr6_0	),
 										.reset(						reset							),
 										.PC_Write(					PC_Write						),
-										.Seletor_Ula(				Seletor							),
+										.Seletor_Ula(					Seletor						),
 										.mux_A_seletor(				Mux64_Ula_A_Seletor				),
     									.mux_B_seletor(				Mux64_Ula_B_Seletor				),
 										.register_Inst_wr(			load_ir							),
 										.Data_Memory_wr(			Data_Memory_write				),
 										.bancoRegisters_wr(			bancoRegisters_write			),
-										.Mux_Banco_Reg_Seletor(		Mux64_Banco_Reg_Seletor			)
+										.Mux_Banco_Reg_Seletor(		Mux64_Banco_Reg_Seletor			),
+										.z(		                    z                				),
+										.igual(		                igual                			),
+										.maior(		                maior                			),
+										.menor(		                menor                			),
+										.reset_A( 					reset_A							)
 																									);
 //_____________________________________________________________________________________________________
 //_________________________________________Registrador PC [In 64 Bits ] [Out 32 Bits ]_________________
 	Reg_PC PC( 							.clk(						clock							), 
 										.reset(						reset							), 
-										.regWrite(					PC_Write						), 
-										.DadoIn(					64'd100							), 
+										.regWrite(					UC_PcWrite						), 
+										.DadoIn(					S								), 
 										.DadoOut(					PC_DadosOut						)
 																									);
 //_____________________________________________________________________________________________________
@@ -131,7 +138,6 @@ reg [63:0] Saida_da_Ula;
 										.Dataout(					Memory_Instruction_DataOut		), 
 										.Wr(						0								)
 																									);															
-
 //_____________________________________________________________________________________________________
 //_________________________________________Memoria de Dados 64 Bits____________________________________
 	Memoria64 Data_Memory( 			
@@ -152,7 +158,7 @@ reg [63:0] Saida_da_Ula;
 																									);	
 //_____________________________________________________________________________________________________
 //_________________________________________Mux 64 Bits da Entrada do banco de registradores____________
-	mux64 Mux64_Banco_Reg(				.Sel(					Mux64_Banco_Reg_Seletor			),
+	mux64 Mux64_Banco_Reg(				.Seletor(					Mux64_Banco_Reg_Seletor			),
 										.A(							Reg_ULAOut_Out					),
 										.B(							Reg_Memory_Data_Out				),
 										.C(															),
@@ -197,7 +203,7 @@ Instr_Reg_RISC_V Register_Intruction(	.Clk(						clock							),
 //_____________________________________________________________________________________________________
 //_________________________________________Registrador A 64 Bits_______________________________________
 	register Reg_A( 					.clk(						clock							), 
-										.reset(						reset							), 
+										.reset(						reset_A							), 
 										.regWrite(					clock							), 
 										.DadoIn(					bancoRegisters_DataOut_1		), 
 										.DadoOut(					Reg_A_Out						)
@@ -212,20 +218,20 @@ Instr_Reg_RISC_V Register_Intruction(	.Clk(						clock							),
 																									);
 //_____________________________________________________________________________________________________									
 //_________________________________________Mux Entrada A da Ula A 64 Bits _____________________________								
-	mux64 Mux64_Ula_A(				.Sel(					3'd3				),
-										.A(							32'd100						),
+	mux64_PC Mux64_Ula_A(				.Seletor(					Mux64_Ula_A_Seletor				),
+										.A(							PC_DadosOut						),
 										.B(							Reg_A_Out						),
 										.C(															),
-										.D(							64'd10								),
+										.D(															),
 										.Saida(						Mux64_Ula_A_Out					)
 																									);											  
 //_____________________________________________________________________________________________________	
 //_________________________________________Mux Entrada B da Ula A 64 Bits _____________________________
-	mux64 Mux64_Ula_B(					.Sel(					3'd3				),
+	mux64 Mux64_Ula_B(					.Seletor(					Mux64_Ula_B_Seletor				),
 										.A(							Reg_B_Out						),
 										.B(							64'd4							),
 										.C(							Sinal_Extend_Out				),
-										.D(							64'd10								),
+										.D(															),
 										.Saida(						Mux64_Ula_B_Out					)
 																									);	
 //_____________________________________________________________________________________________________	
