@@ -1,2 +1,3 @@
 # Projeto_Hardware
-Só adicionem algo depois de testar ! Não modifiquem o que você não mexeu
+Projeto desenvolvido para a disciplina infraestrutura de Hardware/CIn-UFPE
+Processador do RISC-V
